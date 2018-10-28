@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+
+<configuration>
+
+
+
+    <settings>
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+<!--    <typeAliases>
+        <typeAlias alias="Book" type="com.br.pojo.Book"/>
+        <typeAlias alias="Author" type="com.br.pojo.Author"/>
+        <typeAlias alias="User" type="com.br.pojo.User"/>
+        <typeAlias alias="Tag" type="com.br.pojo.Tag"/>
+        <typeAlias alias="Comment" type="com.br.pojo.Comment"/>
+        <typeAlias alias="Favor" type="com.br.pojo.Favor"/>
+
+    </typeAliases>
+
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageHelper">
+            <property name="dialect" value="h2"/>
+        </plugin>
+    </plugins>-->
+
+
+</configuration>

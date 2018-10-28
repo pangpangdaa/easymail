@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.easymail.easymail.mapper.MissionMapper">
+    <cache />
+
+    <resultMap id="MissionMap" type="Mission">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" property="name" />
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="recv_date" property="recvDate"/>
+    </resultMap>
+
+
+
+    <insert id="insertMission" parameterType="Mission" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mission
+        (name,title,content,recv_date)
+        VALUES
+            (#{name},#{title},#{content},#{recvDate})
+    </insert>
+
+    <insert id="insertMissions" parameterType="List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mission
+        (name,title,content,recv_date)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},#{item.title},#{item.content},#{item.recvDate})
+        </foreach>
+    </insert>
+
+
+    <select id="getMissionsByTitle" resultMap="MissionMap">
+        SELECT * FROM mission WHERE title = #{title};
+    </select>
+
+    <select id="getMissionByTitleAndName" resultMap="MissionMap">
+        SELECT * FROM mission WHERE title = #{title} AND name = #{name} LIMIT 1;
+    </select>
+
+    <delete id="deleteMissionByTitleAndName">
+        DELETE FROM mission WHERE title = #{title} AND name = #{name};
+    </delete>
+
+</mapper>
