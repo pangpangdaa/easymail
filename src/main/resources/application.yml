@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost/t_mail?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost/t_mail?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false
     username: root
     password: root
 
