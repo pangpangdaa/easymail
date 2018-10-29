@@ -6,6 +6,7 @@ import com.easymail.easymail.mapper.MissionMapper;
 import com.easymail.easymail.mapper.UserMapper;
 import com.easymail.easymail.service.MailService;
 import com.easymail.easymail.util.ExcelUtils;
+import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -29,7 +30,7 @@ import java.util.List;
 @Controller
 @Slf4j
 public class TestController {
-
+/*
     @Autowired
     MailService mailService;
 
@@ -97,12 +98,12 @@ public class TestController {
             }
             userMapper.createUsers(users);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("{}",Throwables.getStackTraceAsString(e));
         } finally {
             try {
                 fileInputStream.close();
             }catch (Exception e){
-                e.printStackTrace();
+                log.error("{}",Throwables.getStackTraceAsString(e));
             }
 
         }
@@ -134,13 +135,13 @@ public class TestController {
                 bos.write(buff,0,bytesRead);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("{}",Throwables.getStackTraceAsString(e));
         }finally {
             try {
                 if (bis != null) bis.close();
                 if (bos != null) bos.close();
             }catch (Exception e){
-                e.printStackTrace();
+                log.error("{}",Throwables.getStackTraceAsString(e));
             }
         }
 
@@ -162,5 +163,5 @@ public class TestController {
     @ResponseBody
     public Object findAll(){
         return userMapper.findAll();
-    }
+    }*/
 }

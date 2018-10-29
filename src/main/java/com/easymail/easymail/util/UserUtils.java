@@ -21,11 +21,12 @@ public class UserUtils {
 
     public synchronized Map<String,User> getUserMap(){
         if(userMap==null){
+            log.info("初始化userMap");
             userMap = new HashMap<String,User>();
             List<User> userList = userMapper.findAll();
            // log.info("userList size {}",userList.size());
             for(User user:userList){
-                log.info("{}",user.getName());
+              //  log.info("{}",user.getName());
                 userMap.put(user.getName(),user);
             }
         }

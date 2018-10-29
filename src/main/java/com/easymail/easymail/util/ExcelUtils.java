@@ -21,6 +21,7 @@ public class ExcelUtils {
 
 
      public HSSFWorkbook generateHSSFWorkbook(List<Mission> missions,List<User> users,String title){
+         log.info("创建excel");
          HSSFWorkbook workbook = new HSSFWorkbook();
          HSSFSheet sheet = workbook.createSheet(title);
          HSSFRow firstRow = sheet.createRow(0);

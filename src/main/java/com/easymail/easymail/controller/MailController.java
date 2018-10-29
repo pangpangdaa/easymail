@@ -6,6 +6,8 @@ import com.easymail.easymail.mapper.MissionMapper;
 import com.easymail.easymail.mapper.UserMapper;
 import com.easymail.easymail.service.MailService;
 import com.easymail.easymail.util.ExcelUtils;
+import com.google.common.base.Throwables;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@Slf4j
 @RequestMapping("/mail")
 public class MailController {
 
@@ -44,7 +47,7 @@ public class MailController {
         return "result";
     }
 
-    @GetMapping("/instruction")
+    @GetMapping(        "/instruction")
     public String instuction(){
         return "instruction";
     }
@@ -97,7 +100,7 @@ public class MailController {
                 bos.write(buff,0,bytesRead);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("{}",Throwables.getStackTraceAsString(e));
         }finally {
             try {
                 if (bis != null) bis.close();

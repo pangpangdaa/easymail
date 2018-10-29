@@ -5,6 +5,7 @@ import com.easymail.easymail.entity.User;
 import com.easymail.easymail.mapper.MissionMapper;
 import com.easymail.easymail.service.MailService;
 import com.easymail.easymail.util.UserUtils;
+import com.google.common.base.Throwables;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +82,7 @@ public class MailServiceImpl implements MailService{
         log.info("total messages {}",message.length);
         return message;
     }catch (Exception e){
-        e.printStackTrace();
+        log.error("{}",Throwables.getStackTraceAsString(e));
     } finally {
       //  folder.close(false);
        // store.close();
@@ -104,6 +105,7 @@ public class MailServiceImpl implements MailService{
     }
 
     public Map<String,List<String>> checkMissionInfo(String title){
+        log.info("任务完成情况检查");
         Map<String,User> userMap = new HashMap<>(userUtils.getUserMap());
         List<Mission> missions = missionMapper.getMissionsByTitle(title);
         List<String> fullFilled = new ArrayList<>();
@@ -129,7 +131,17 @@ public class MailServiceImpl implements MailService{
             Map<String, User> userMap = userUtils.getUserMap();
             List<Mission> missions = new ArrayList<>();
             for (Message message : messageList) {
-                String userName = message.getSubject().split("_")[0];
+                String[] splits = null;
+                splits = message.getSubject().split("_");
+                if(splits.length<3){
+                    splits = message.getSubject().split("-");
+                    if(splits.length<3){
+                        splits = message.getSubject().split(" ");
+                        if(splits.length<3) continue;
+                    }
+                }
+                String userName = splits[0];
+                log.info("查找到可能是任务邮件，用户{}",userName);
                 Mission existMission = missionMapper.getMissionByTitleAndName(title, userName);
                 if (existMission != null) {
                     if (existMission.getRecvDate().compareTo(message.getReceivedDate()) < 0) {
@@ -148,6 +160,7 @@ public class MailServiceImpl implements MailService{
                         mission.setContent(content);
                         mission.setName(userName);
                         mission.setRecvDate(message.getReceivedDate());
+                        log.info("新增完成任务{}",mission);
                         missions.add(mission);
                     }
 
@@ -157,13 +170,13 @@ public class MailServiceImpl implements MailService{
                 missionMapper.insertMissions(missions);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            log.error("{}",Throwables.getStackTraceAsString(e));
         }finally {
             try {
                 if (folder != null) folder.close(false);
                 if (store != null) store.close();
             }catch (Exception e){
-                e.printStackTrace();
+                log.error("{}",Throwables.getStackTraceAsString(e));
             }
         }
     }
