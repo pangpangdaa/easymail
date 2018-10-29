@@ -8,6 +8,7 @@ import com.easymail.easymail.util.UserUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
@@ -29,11 +30,14 @@ public class MailServiceImpl implements MailService{
     @Autowired
     UserUtils userUtils;
 
-    private String host = "imap.126.com";
+    @Value("${info.host}")
+    private String host;
 
-    private String username = "akiyamamio11";
+    @Value("${info.username}")
+    private String username;
 
-    private String password = "dianjigs11";
+    @Value("${info.password}")
+    private String password;
 
     private Store store = null;
     private Folder folder = null;
@@ -49,6 +53,7 @@ public class MailServiceImpl implements MailService{
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
         store = session.getStore("imap");
+        log.info("{},{},{}",username,password,host);
         store.connect(host, username, password);
         folder = store.getFolder("INBOX");
         folder.open(Folder.READ_ONLY);
