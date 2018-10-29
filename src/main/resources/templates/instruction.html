@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>首页</title>
+    <title>邮件收取结果</title>
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
     <script type="text/javascript" src="/js/jquery-1.11.0.js"></script>
     <script type="text/javascript" src="/js/bootstrap.js"></script>
@@ -39,19 +39,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">首页</a>
+                <a class="navbar-brand" href="#">使用说明</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active">
+                    <li >
                         <a href="/mail">首页<span class="sr-only">(current)</span></a>
                     </li>
                     <li >
                         <a href="/mail/classinfo">班级成员信息</a>
                     </li>
-                    <li >
+                    <li class="active">
                         <a href="/mail/instruction">使用说明</a>
                     </li>
 
@@ -72,9 +72,10 @@
         <!-- /.container-fluid -->
     </nav>
     <!--每日推荐-->
+    <h3>使用说明</h3>
     <ul>
-        <h3>过往任务</h3>
-        <li  th:each="mission:${missions}">
+
+
             <div class="row">
 
                 <div class="col-md-6 col-sm-6 col-xs-12 bookItem">
@@ -83,8 +84,15 @@
                             <td>
                             </td>
                             <td>
-                               <!-- +' '+${user.age}+' '+{uesr.sex}+' '+{user.identity}+' '+{user.major}+' '+{user.className}}-->
-                                <a th:href="@{'/mail/checkMissionInfo/'+${mission}}" th:text="${mission}">标题</a>
+                                <h3>基本使用</h3>
+                                <p>收集邮件时请固定邮件主题格式</p>
+                                <p>以 姓名_学号_任务主题 为邮件主题</p>
+                                <p>例：如对收集素质拓展信息的收集，就是刘小驰_2078321_素质拓展 这样的主题</p>
+
+                                <h3>其他说明</h3>
+                                <p>1.对于同一人重复发送的情况，系统统计时会统计最新发送的一封。</p>
+                                <p>2.邮件的内容直接统计在excel中，之后可以在excel中进行处理</p>
+                                <p>3.暂时不具备收取附件能力，有需要可以添加</p>
                             </td>
 
                         </tr>

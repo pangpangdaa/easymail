@@ -44,6 +44,11 @@ public class MailController {
         return "result";
     }
 
+    @GetMapping("/instruction")
+    public String instuction(){
+        return "instruction";
+    }
+
     @GetMapping
     public String firstpage(Model model){
         model.addAttribute("missions",missionMapper.getAllMissionTitles());
