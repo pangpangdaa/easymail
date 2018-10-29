@@ -112,8 +112,8 @@ public class MailServiceImpl implements MailService{
         for(Map.Entry entry:userMap.entrySet()){
             unFullFilled.add((String)entry.getKey());
         }
-        result.put("已完成",fullFilled);
-        result.put("未完成",unFullFilled);
+        result.put("fullfilled",fullFilled);
+        result.put("unfullfilled",unFullFilled);
         return result;
     }
 

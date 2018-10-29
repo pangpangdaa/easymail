@@ -14,4 +14,5 @@ public interface MissionMapper {
     Mission getMissionByTitleAndName(@Param("title") String title,@Param("name") String name);
     void deleteMissionByTitleAndName(@Param("title") String title,@Param("name") String name);
     void insertMissions(List<Mission> missions);
+    List<String> getAllMissionTitles();
 }

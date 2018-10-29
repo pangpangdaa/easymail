@@ -78,11 +78,12 @@ public class TestController {
     public Object getClassMember(){
         FileInputStream fileInputStream = null;
         try {
-            fileInputStream = new FileInputStream("C:\\Users\\xuwei\\Desktop\\test.csv");
+            fileInputStream = new FileInputStream("C:\\Users\\huang\\Desktop\\test.csv");
             BufferedReader br = new BufferedReader(new InputStreamReader(fileInputStream));
             String line = null;
             List<User> users=new ArrayList<User>();
             while((line=br.readLine())!=null){
+                log.info("line : {}",line);
                 String[] fields=line.split(",");
                 User user = new User();
                 user.setName(fields[1]);
@@ -148,7 +149,7 @@ public class TestController {
 
     @GetMapping("/rank")
     public String getRank(){
-        return "about";
+        return "result";
     }
 
     @GetMapping("/user/{id}")

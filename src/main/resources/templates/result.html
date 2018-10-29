@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>邮件收取结果</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+    <script type="text/javascript" src="/js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.js"></script>
+    <style>
+			.bookItem{
+				/*border: 1px;width: 150px;*/
+			}
+			.bookInfo{
+				border: gainsboro solid 2px;
+				height: 200px;
+				width: 50%;
+				margin-left: 25%;
+				margin-right: 25%;
+			}
+			.lunboPic{
+				right: 10px;
+			}
+		</style>
+</head>
+
+<body>
+<div class="container">
+    <!--导航条-->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">邮件收取详情</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li >
+                        <a href="/mail">首页<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="/mail/classinfo">班级成员信息</a>
+                    </li>
+
+                </ul>
+                <ul class="nav nav-pills pull-right">
+                    <li style="margin-right: 30px;">
+                        <form class="navbar-form navbar-right" action="/mail/search">
+                            <div class="form-group">
+                                <input name="words" type="text" class="form-control" placeholder="Search">
+                            </div>
+                            <button type="submit" class="btn btn-default">搜索</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <!--每日推荐-->
+    <h3>完成情况</h3>
+    <ul>
+
+
+            <div class="row">
+
+                <div class="col-md-6 col-sm-6 col-xs-12 bookItem">
+                    <table>
+                        <tr>
+                            <td>
+                            </td>
+                            <td>
+
+                                <p th:text="@{'已完成: '+${result.fullfilled}}">已完成部分</p>
+                                <p th:text="@{'未完成: '+${result.unfullfilled}}">未完成部分</p>
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <hr />
+        <a class="btn btn-primary" th:href="@{'/mail/download/'+${title}}" role="button">下载为EXCEL</a>
+    </ul>
+
+</body>
+
+</html>

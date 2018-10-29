@@ -22,6 +22,10 @@
             (#{name},#{title},#{content},#{recvDate})
     </insert>
 
+    <select id="getAllMissionTitles" resultType="java.lang.String">
+        SELECT DISTINCT title FROM mission;
+    </select>
+
     <insert id="insertMissions" parameterType="List" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO mission
         (name,title,content,recv_date)
