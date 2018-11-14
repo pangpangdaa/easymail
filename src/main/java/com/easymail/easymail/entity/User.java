@@ -15,4 +15,5 @@ public class User implements Serializable{
     String identity;
     String major;
     String className;
+    String tel;
 }

@@ -71,6 +71,13 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
+
+    <div class="col-md-12 personal-info">
+        <div class="alert alert-info alert-dismissable" th:unless="${#strings.isEmpty(message)}">
+            <a class="panel-close close" data-dismiss="alert"></a>
+            <a th:text="${message}"></a>
+        </div>
+    </div>
     <!--每日推荐-->
     <ul>
         <h3>过往任务</h3>
@@ -79,15 +86,17 @@
 
                 <div class="col-md-6 col-sm-6 col-xs-12 bookItem">
                     <table>
-                        <tr>
+                        <tr class="blog-post">
+                            <td class="blog-post-title"><a th:href="@{'/mail/checkMissionInfo/'+${mission}}" th:text="${mission}">标题</a></td>
+                            <td>         </td>
                             <td>
+                                <form class="blog-post-delete-form" style="margin-left:80px;" th:action="@{'/mail/delete/'+${mission}}" method="post" onsubmit="return confirm('确定要删除这个任务吗？');">
+                                    <input type="hidden" name="_method" value="delete" >
+                                    <button type="submit" class="btn btn-danger blog-post-delete-btn">删除任务</button>
+                                </form>
                             </td>
-                            <td>
-                               <!-- +' '+${user.age}+' '+{uesr.sex}+' '+{user.identity}+' '+{user.major}+' '+{user.className}}-->
-                                <a th:href="@{'/mail/checkMissionInfo/'+${mission}}" th:text="${mission}">标题</a>
-                            </td>
-
                         </tr>
+
                     </table>
                 </div>
             </div>

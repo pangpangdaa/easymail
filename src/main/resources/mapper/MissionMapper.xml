@@ -15,37 +15,41 @@
 
 
 
-    <insert id="insertMission" parameterType="Mission" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertMission"  useGeneratedKeys="true" keyProperty="id">
         INSERT INTO mission
-        (name,title,content,recv_date)
+        (name,title,content,recv_date,account_id)
         VALUES
-            (#{name},#{title},#{content},#{recvDate})
+            (#{mission.name},#{mission.title},#{mission.content},#{mission.recvDate},#{accountId})
     </insert>
+    
+    <delete id="deleteMissionByTitle">
+        DELETE FROM mission WHERE title = #{title} and account_id = #{accountId}
+    </delete>
 
     <select id="getAllMissionTitles" resultType="java.lang.String">
-        SELECT DISTINCT title FROM mission;
+        SELECT DISTINCT title FROM mission WHERE account_id = #{accountId};
     </select>
 
-    <insert id="insertMissions" parameterType="List" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertMissions" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO mission
-        (name,title,content,recv_date)
+        (name,title,content,recv_date,account_id)
         VALUES
-        <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.name},#{item.title},#{item.content},#{item.recvDate})
+        <foreach collection="missions" item="item" index="index" separator=",">
+            (#{item.name},#{item.title},#{item.content},#{item.recvDate},#{accountId})
         </foreach>
     </insert>
 
 
     <select id="getMissionsByTitle" resultMap="MissionMap">
-        SELECT * FROM mission WHERE title = #{title};
+        SELECT * FROM mission WHERE title = #{title} AND account_id = #{accountId};
     </select>
 
     <select id="getMissionByTitleAndName" resultMap="MissionMap">
-        SELECT * FROM mission WHERE title = #{title} AND name = #{name} LIMIT 1;
+        SELECT * FROM mission WHERE title = #{title} AND name = #{name} AND account_id = #{accountId} LIMIT 1;
     </select>
 
     <delete id="deleteMissionByTitleAndName">
-        DELETE FROM mission WHERE title = #{title} AND name = #{name};
+        DELETE FROM mission WHERE title = #{title} AND name = #{name} AND account_id = #{accountId};
     </delete>
 
 </mapper>

@@ -9,10 +9,11 @@ import java.util.List;
 
 @Mapper
 public interface MissionMapper {
-    void insertMission(Mission mission);
-    List<Mission> getMissionsByTitle(@Param("title") String title);
-    Mission getMissionByTitleAndName(@Param("title") String title,@Param("name") String name);
-    void deleteMissionByTitleAndName(@Param("title") String title,@Param("name") String name);
-    void insertMissions(List<Mission> missions);
-    List<String> getAllMissionTitles();
+    void insertMission(@Param("mission") Mission mission,@Param("accountId")Integer accountId);
+    List<Mission> getMissionsByTitle(@Param("title") String title,@Param("accountId") Integer accountId);
+    Mission getMissionByTitleAndName(@Param("title") String title,@Param("name") String name,@Param("accountId") Integer accountId);
+    void deleteMissionByTitleAndName(@Param("title") String title,@Param("name") String name,@Param("accountId") Integer accountId);
+    void insertMissions(@Param("missions") List<Mission> missions,@Param("accountId") Integer accountId);
+    List<String> getAllMissionTitles(@Param("accountId") Integer accountId);
+    void deleteMissionByTitle(@Param("title")String title,@Param("accountId") Integer accountId);
 }

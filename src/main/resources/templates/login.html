@@ -1,0 +1,82 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <title>用户登录</title>
+  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/account.css">
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}" />
+  <script src="//cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+				<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+					<a class="navbar-brand" href="#">easymail</a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							<a href="/mail">首页<span class="sr-only">(current)</span></a>
+						</li>
+						<li >
+							<a href="/mail/classinfo">班级成员信息</a>
+						</li>
+						<li >
+							<a href="/mail/instruction">使用说明</a>
+						</li>
+
+					</ul>
+					<ul class="nav nav-pills pull-right">
+						<li style="margin-right: 30px;">
+							<form class="navbar-form navbar-right" action="/mail/search">
+								<div class="form-group">
+									<input name="words" type="text" class="form-control" placeholder="Search">
+								</div>
+								<button type="submit" class="btn btn-default">搜索</button>
+							</form>
+						</li>
+					</ul>
+				</div>
+				<!-- /.navbar-collapse -->
+			</div>
+
+			<!-- /.container-fluid -->
+		</nav>
+		
+		 <div class="col-md-12 personal-info">
+      <div class="alert alert-info alert-dismissable" th:unless="${#strings.isEmpty(message)}">
+        <a class="panel-close close" data-dismiss="alert"></a>
+        <a th:text="${message}"></a>
+      </div>
+      </div>
+      <br/>
+      <br/>
+
+<form class="form-signin" method="post" th:object="${account}">
+  <h2 class="form-signin-heading">用户登录</h2>
+  <input type="text" name="address" class="form-control" placeholder="邮箱" required="" autofocus="" th:field="*{address}">
+  <input type="password" name="password" class="form-control" placeholder="密码" required="" th:field="*{password}">
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" value="remember-me"> 记住我
+    </label>
+  </div>
+  <button class="btn btn-primary btn-block" type="submit">确定</button>
+</form>
+
+
+
+</body>
+
+</html>

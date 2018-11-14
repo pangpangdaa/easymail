@@ -1,10 +1,16 @@
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost/t_mail?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false
+    url: jdbc:mysql://134.175.150.20:3306/t_mail?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false
     username: root
     password: root
 
 mybatis:
   mapperLocations: classpath:mapper/*.xml
+  config-location: classpath:mybatis.xml
   type-aliases-package: com.easymail.easymail.entity
+
+info:
+  host: imap.163.com
+  username: liuxiaochi721
+  password: dianjigs12

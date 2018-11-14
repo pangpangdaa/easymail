@@ -13,6 +13,7 @@
         <result column="identity" property="identity"/>
         <result column="major" property="major"/>
         <result column="class_name" property="className"/>
+        <result column="tel" property="tel"/>
     </resultMap>
 
     <select id="findUserById" resultMap="UserMap">
