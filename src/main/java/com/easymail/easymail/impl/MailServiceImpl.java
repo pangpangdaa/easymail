@@ -1,13 +1,12 @@
 package com.easymail.easymail.impl;
 
+import com.easymail.easymail.config.GlobalConfig;
 import com.easymail.easymail.entity.Account;
 import com.easymail.easymail.entity.Mission;
 import com.easymail.easymail.entity.User;
 import com.easymail.easymail.mapper.MissionMapper;
 import com.easymail.easymail.service.MailService;
-import com.easymail.easymail.util.Html2Text;
-import com.easymail.easymail.util.MessageUtils;
-import com.easymail.easymail.util.UserUtils;
+import com.easymail.easymail.util.*;
 import com.google.common.base.Throwables;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMultipart;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.*;
 
 /**
@@ -29,10 +30,14 @@ import java.util.*;
 public class MailServiceImpl implements MailService{
 
     @Autowired
-    MissionMapper missionMapper;
+    private MissionMapper missionMapper;
 
     @Autowired
-    UserUtils userUtils;
+    private UserUtils userUtils;
+
+    @Autowired
+    private GlobalConfig globalConfig;
+
 
     @Value("${info.host}")
     private String host;
@@ -90,6 +95,33 @@ public class MailServiceImpl implements MailService{
         return null;
     }
 
+    @Override
+    public void compressMailsByTitle(String title){
+        String titleDirStr = globalConfig.getFolder()+File.separator+title;
+        File titleDir = new File(titleDirStr);
+        if(!titleDir.exists()) return;
+        File zipFile = new File(globalConfig.getFolder()+File.separator+title+".zip");
+        if(zipFile.exists()){
+            FileHelper.deleteFile(zipFile);
+        }
+
+        FileOutputStream fileOutputStream = null;
+        try{
+            fileOutputStream=new FileOutputStream(zipFile);
+            ZipUtils.toZip(titleDirStr,fileOutputStream,true);
+        }catch (Exception e){
+            log.error("{}",Throwables.getStackTraceAsString(e));
+        }finally {
+            if(fileOutputStream != null){
+                try {
+                    fileOutputStream.close();
+                }catch (Exception ex){
+                    log.info("{}",Throwables.getStackTraceAsString(ex));
+                }
+            }
+        }
+
+    }
 
     /**
      * https://www.cnblogs.com/liuyitian/p/4051922.html
@@ -221,6 +253,7 @@ public class MailServiceImpl implements MailService{
 
     @Override
     public void collectMissonInfo(String title,Account account) {
+
         try {
            Message[] messages = getMessagesByAccount(account);
             List<Mission> missions = new ArrayList<>();
@@ -236,54 +269,37 @@ public class MailServiceImpl implements MailService{
                         missionMapper.deleteMissionByTitleAndName(title, user.getName(),account.getId());
                     } else continue;
                 }
-                try {
-                    Multipart multipart = (Multipart) message.getContent();
-                    log.info("message type{}",message.getContentType());
-                    for (int j = 0; j < multipart.getCount(); j++) {
-                        BodyPart part = multipart.getBodyPart(j);
-                        String type = part.getContentType().split(";")[0];
-                        if (type.equals("text/plain")) { //纯文本
-                            String content = part.getContent().toString();
-                            content = content.replaceAll("\\s*"," ");
-                            Mission mission = new Mission();
-                            mission.setTitle(title);
-                            mission.setContent(content);
-                            mission.setName(user.getName());
-                            mission.setRecvDate(message.getReceivedDate());
-                            log.info("新增完成任务{}", mission);
-                            missions.add(mission);
-                        }
-
-                    }
-                } catch (Exception e) {
-                    log.info("邮件不是multipart格式，是{}", message.getContentType());
-
-                    Mission mission = new Mission();
-                    mission.setTitle(title);
-                    if(message.getContentType().indexOf("html")!=-1){
-                        String content=Html2Text.getContent(message.getContent().toString()).replaceAll("\\s*"," ");
-                        mission.setContent(content);
-                    } else {
-                        String content=message.getContent().toString().replaceAll("\\s*"," ");
-                        mission.setContent(content);
-                    }
-                    mission.setName(user.getName());
-                    mission.setRecvDate(message.getReceivedDate());
-                    log.info("新增完成任务{}", mission);
-                    missions.add(mission);
+                String attachmentPath=globalConfig.getFolder()+File.separator+title;
+                File dir = new File(attachmentPath);
+                if(!dir.exists()){
+                    //对应的任务文件夹没有创建就新建任务文件夹
+                    dir.mkdir();
                 }
+                if(MessageUtils.isContainAttachment(message)){
+                    log.info("{}含有附件",message.getSubject());
+                    MessageUtils.saveAttachment(message,attachmentPath);
+                }
+                StringBuffer content= new StringBuffer();
+                MessageUtils.getMailTextContent(message,content);
+                Mission mission = new Mission();
+                mission.setTitle(title);
+                mission.setName(user.getName());
+                mission.setRecvDate(message.getReceivedDate());
+                mission.setContent(content.toString());
+                missions.add(mission);
+                log.info("新增完成任务{}", mission);
             }
             if (missions.size() != 0) {
                 safeMissions(missions,account);
             }
         }catch (Exception e){
-
+            log.info("{}",Throwables.getStackTraceAsString(e));
         }finally {
             try {
                 if (folder != null) folder.close(false);
                 if (store != null) store.close();
-            }catch (Exception e){
-                log.error("{}",Throwables.getStackTraceAsString(e));
+            }catch (Exception ex){
+                log.error("{}",Throwables.getStackTraceAsString(ex));
             }
         }
     }

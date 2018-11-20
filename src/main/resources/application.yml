@@ -4,6 +4,10 @@ spring:
     url: jdbc:mysql://134.175.150.20:3306/t_mail?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false
     username: root
     password: root
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: test
 
 mybatis:
   mapperLocations: classpath:mapper/*.xml
@@ -14,3 +18,6 @@ info:
   host: imap.163.com
   username: liuxiaochi721
   password: dianjigs12
+
+
+filepath: C:/Users/xuwei/Desktop/tmp

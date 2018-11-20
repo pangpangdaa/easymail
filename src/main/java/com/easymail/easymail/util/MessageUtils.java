@@ -1,6 +1,9 @@
 package com.easymail.easymail.util;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -35,6 +38,7 @@ import javax.mail.internet.MimeUtility;
 /**
  * 使用POP3协议接收邮件
  */
+@Slf4j
 public class MessageUtils {
 
 
@@ -182,7 +186,7 @@ public class MessageUtils {
 
     /**
      * 判断邮件中是否包含附件
-     * @param msg 邮件内容
+     * @param part 邮件内容
      * @return 邮件中存在附件返回true，不存在返回false
      * @throws MessagingException
      * @throws IOException
@@ -274,7 +278,7 @@ public class MessageUtils {
         //如果是文本类型的附件，通过getContent方法可以取到文本内容，但这不是我们需要的结果，所以在这里要做判断
         boolean isContainTextAttach = part.getContentType().indexOf("name") > 0;
         if (part.isMimeType("text/*") && !isContainTextAttach) {
-            content.append(part.getContent().toString());
+            content.append(part.getContent().toString().replaceAll("\\s*"," "));
         } else if (part.isMimeType("message/rfc822")) {
             getMailTextContent((Part)part.getContent(),content);
         } else if (part.isMimeType("multipart/*")) {
@@ -283,6 +287,14 @@ public class MessageUtils {
             for (int i = 0; i < partCount; i++) {
                 BodyPart bodyPart = multipart.getBodyPart(i);
                 getMailTextContent(bodyPart,content);
+            }
+        } else if(part.isMimeType("html/*")){
+           content.append(Html2Text.getContent(part.getContent().toString()).replaceAll("\\s*"," "));
+        } else {
+            try {
+                content.append(Html2Text.getContent(part.getContent().toString()).replaceAll("\\s*", " "));
+            }catch (Exception e){
+                content.append(part.getContent().toString().replaceAll("\\s"," "));
             }
         }
     }
@@ -334,14 +346,22 @@ public class MessageUtils {
      */
     private static void saveFile(InputStream is, String destDir, String fileName)
             throws FileNotFoundException, IOException {
+        File file = new File(destDir+File.separator+fileName);
+        if(file.exists()){
+            log.info("{}已存在",file.getName());
+
+            file.delete();
+            log.info("删除{}",file.getName());
+        }
         BufferedInputStream bis = new BufferedInputStream(is);
         BufferedOutputStream bos = new BufferedOutputStream(
-                new FileOutputStream(new File(destDir + fileName)));
+                new FileOutputStream(file));
         int len = -1;
         while ((len = bis.read()) != -1) {
             bos.write(len);
             bos.flush();
         }
+        log.info("{}存储完成",fileName);
         bos.close();
         bis.close();
     }

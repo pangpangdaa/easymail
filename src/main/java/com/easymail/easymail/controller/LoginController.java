@@ -39,7 +39,7 @@ public class LoginController {
             return "login";
         }
         Account account1= accountMapper.findAccountByAddress(account.getAddress());
-        if(account1!=null && account1.getPassword().equals(account.getPassword())){
+        if(account1!=null && account1.getPasswd().equals(account.getPasswd())){
             session.setAttribute("CURRENT_USER", account1);
             session.setMaxInactiveInterval(30*60);
             redirectAttributes.addFlashAttribute("message","登录成功");

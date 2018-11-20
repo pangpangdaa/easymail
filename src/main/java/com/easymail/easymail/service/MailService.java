@@ -15,7 +15,7 @@ public interface MailService{
     List<Message> getFilterdMessages(String title, Date date) throws Exception;
     void collectMissonInfo(String title,Account account);
     Map<String,List<String>> checkMissionInfo(String title,Account account);
-
+    void compressMailsByTitle(String title);
 
 
 
