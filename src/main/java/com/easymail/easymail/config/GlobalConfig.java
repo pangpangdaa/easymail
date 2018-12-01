@@ -15,6 +15,11 @@ public class GlobalConfig {
     @Value("${filepath}")
     private String folder;
 
+    @Value("${ocrpath}")
+    private String ocrFolder;
+
+    public static String preview = "preview.JPG";
+
     //存储邮件有没有更新过的状态
  //   private ConcurrentHashMap<String,Boolean> changedMap = new ConcurrentHashMap<String,Boolean>();
 }

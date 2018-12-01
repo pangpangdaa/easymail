@@ -10,6 +10,7 @@ import com.easymail.easymail.mapper.UserMapper;
 import com.easymail.easymail.repository.AttachmentRepository;
 import com.easymail.easymail.service.MailService;
 import com.easymail.easymail.util.ExcelUtils;
+import com.easymail.easymail.util.FileHelper;
 import com.easymail.easymail.util.MongodbUtils;
 import com.easymail.easymail.util.ZipUtils;
 import com.google.common.base.Throwables;
@@ -93,6 +94,8 @@ public class MailController {
         }
         if(StringUtils.isEmpty(title)) return "firstpage";
         missionMapper.deleteMissionByTitle(title,account.getId());
+        FileHelper.deleteFile(globalConfig.getFolder()+File.separator+title);
+        FileHelper.deleteFile(globalConfig.getFolder()+File.separator+title+".zip");
         return "redirect:/mail";
     }
 
